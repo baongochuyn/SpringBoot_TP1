@@ -5,7 +5,9 @@ import java.util.List;
 import com.springboot.tp.domain.entity.Lesson;
 import com.springboot.tp.domain.entity.Theme;
 import com.springboot.tp.infra.repository.LessonRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LessonService {
     private final LessonRepository repository;
      private final ThemeService themeService;
