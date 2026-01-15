@@ -23,7 +23,7 @@ public class LessonService {
         return repository.save(lesson);
     }
 
-    public List<Lesson> findAll() {
-        return repository.findAll();
+    public List<Lesson> findAllWithTheme() {
+        return repository.findAllWithTheme();
     }
 }
