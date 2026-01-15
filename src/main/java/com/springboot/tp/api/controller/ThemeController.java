@@ -1,5 +1,5 @@
 package com.springboot.tp.api.controller;
-import com.springboot.tp.api.dto.theme.ThemeCreateDto;
+import com.springboot.tp.api.dto.theme.ThemeDto;
 import com.springboot.tp.api.mapper.ThemeApiMapper;
 import com.springboot.tp.app.service.ThemeService;
 import com.springboot.tp.domain.entity.Theme;
@@ -16,9 +16,9 @@ public class ThemeController {
     }
 
     @PostMapping("/themes")
-    ThemeCreateDto newTheme(@RequestBody String name) {
+    ThemeDto newTheme(@RequestBody String name) {
         Theme theme = service.create(name);
-        return ThemeApiMapper.toCreateDto(theme);
+        return ThemeApiMapper.toDto(theme);
     }
 
 }
