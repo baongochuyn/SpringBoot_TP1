@@ -10,4 +10,7 @@ public interface ThemeRepository extends JpaRepository<Theme, Long>{
 
     // Permet de récupérer un thème par son nom si besoin
     Optional<Theme> findByName(String name);
+
+    // Permet de récupérer un thème par son id
+    Optional<Theme> findById(Long id);
 }
