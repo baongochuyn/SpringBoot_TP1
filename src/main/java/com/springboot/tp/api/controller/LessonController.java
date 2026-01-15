@@ -8,7 +8,6 @@ import com.springboot.tp.domain.entity.Lesson;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lessons")
@@ -24,7 +23,7 @@ public class LessonController {
     @GetMapping
     public List<LessonDto> getAllLessons() {
         List<Lesson> lessonList = service.findAllWithTheme();
-        return lessonList.stream().map(LessonApiMapper::toDto).collect(Collectors.toList());
+        return LessonApiMapper.toDto(lessonList);
     }
 
     @PostMapping("/themes/{themeId}/lessons")
