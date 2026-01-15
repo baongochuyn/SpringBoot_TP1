@@ -1,6 +1,8 @@
 package com.springboot.tp.api.controller;
 
 
+import com.springboot.tp.api.dto.lesson.LessonDto;
+import com.springboot.tp.api.mapper.LessonApiMapper;
 import com.springboot.tp.app.service.LessonService;
 import com.springboot.tp.domain.entity.Lesson;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +21,14 @@ public class LessonController {
     }
 
     @GetMapping
-    public List<Lesson> getAllLessons() {
-        return service.findAll();
+    public List<LessonDto> getAllLessons() {
+        List<Lesson> lessonList = service.findAllWithTheme();
+        return LessonApiMapper.toDto(lessonList);
     }
 
     @PostMapping("/themes/{themeId}/lessons")
-    Lesson newLessonWithTheme(@RequestBody String title, @PathVariable Long themeId) {
-        return service.create(title, themeId);
+    LessonDto newLessonWithTheme(@RequestBody String title, @PathVariable Long themeId) {
+        Lesson lesson = service.create(title, themeId);
+        return LessonApiMapper.toDto(lesson);
     }
 }
