@@ -20,10 +20,25 @@ public class Lesson {
     public Lesson() {}
     public Lesson(String title) { this.title = title; }
 
+    public Lesson(String title, Theme theme) {
+        this.title = title;
+        setTheme(theme);
+    }
+
     // Getters & Setters
     public Long getId() { return id; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     public Theme getTheme() { return theme; }
-    public void setTheme(Theme theme) { this.theme = theme; }
+    public void setTheme(Theme theme) {
+        //Supprime cette leçon de l'ancien thème si elle existe
+        if (this.theme != null) {
+            this.theme.getLessons().remove(this);
+        }
+        this.theme = theme;
+        // Ajouter au nouveau thème
+        if (theme != null && !theme.getLessons().contains(this)) {
+            theme.getLessons().add(this);
+        }
+    }
 }
