@@ -1,3 +1,30 @@
 package com.springboot.tp.api.dto.lesson;
 
-public record LessonDto(Long id, String title, String themeName) {}
+public class LessonDto {
+    private Long id;
+    private String title;
+    private String themeName;
+
+    public LessonDto() {
+    }
+
+    public LessonDto(Long id, String title,String themeName) {
+        this.id = id;
+        this.title = title;
+        this.themeName = themeName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getThemeName() {
+        return themeName;
+    }
+}
+
+
