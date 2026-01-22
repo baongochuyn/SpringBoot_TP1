@@ -3,6 +3,8 @@ package com.springboot.tp.api.controller;
 import com.springboot.tp.api.dto.Login.LoginRequestDto;
 import com.springboot.tp.api.dto.Login.LoginResponseDto;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,8 +18,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponseDto login(@RequestBody LoginRequestDto loginRequestDto) {
-        String token = authService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+    public LoginResponseDto login(@Valid @RequestBody LoginRequestDto request) {
+        String token = authService.login(
+                request.getUsername(),
+                request.getPassword());
         return new LoginResponseDto(token);
     }
 }
