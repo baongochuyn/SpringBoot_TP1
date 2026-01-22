@@ -3,6 +3,7 @@ package com.springboot.tp.security.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -27,7 +28,7 @@ public class SecurityConfig {
                         // Le reste
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth -> oauth.jwt()) // Active la vérif JWT
+                .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults())) // Active la vérif JWT
                 .build();
     }
     
