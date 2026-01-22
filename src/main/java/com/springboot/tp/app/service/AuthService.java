@@ -8,20 +8,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+@Service
 public class AuthService {
     
 
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider JwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
 
     public AuthService(
             AuthenticationManager authenticationManager,
-            JwtTokenProvider JwtTokenProvider,
+            JwtTokenProvider jwtTokenProvider,
             UserRepository userRepository
     ) {
         this.authenticationManager = authenticationManager;
-        this.JwtTokenProvider = JwtTokenProvider;
+        this.JwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
     }
 
