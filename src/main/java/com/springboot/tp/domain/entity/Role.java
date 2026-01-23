@@ -1,6 +1,6 @@
 package com.springboot.tp.domain.entity;
 
 public enum Role {
-    ROLE_ADMIN,
-    ROLE_USER
+    ADMIN,
+    USER
 }
