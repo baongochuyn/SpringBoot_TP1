@@ -6,6 +6,7 @@ import com.springboot.tp.security.jwt.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +29,12 @@ public class AuthService {
     }
 
     public String login(String username, String password) {
-
+        System.out.println("Attempting login with username: " + username + " and password: " + password);
+        System.out.println("Match ? " + new BCryptPasswordEncoder().matches("admin123", "$2a$10$4QGYbT6a2Z3HvVX.8Cb/yO.4N4SGCbQwBQhayd.cyr7JApOYVUe8O"));
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(username, password)
         );
+        System.out.println("Authentication success: " + authentication.isAuthenticated());
 
         /*User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
