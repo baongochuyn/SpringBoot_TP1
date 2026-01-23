@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
-
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,14 +28,23 @@ public class JwtTokenProvider {
         this.jwtProperties = jwtProperties;
     }
 
-    public String generateToken(String username) {
+    public String generateToken(Authentication authentication) {
         Instant now = Instant.now();
+
+        //Récupérer les rôles de l'utilisateur authentifié
+        String scope = authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.joining(" "));
+
+        JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
+
         JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(username)
+                .subject(authentication.getName())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(jwtProperties.getExpiration()))
+                .claim("roles", scope)
                 .build();
-        return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader,claims)).getTokenValue();
     }
 
     public boolean validateToken(String token) {
