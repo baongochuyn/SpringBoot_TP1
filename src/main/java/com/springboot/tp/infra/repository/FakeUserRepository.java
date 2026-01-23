@@ -1,6 +1,8 @@
 package com.springboot.tp.infra.repository;
 
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.springboot.tp.domain.entity.Role;
@@ -14,11 +16,12 @@ import java.util.Optional;
 public class FakeUserRepository {
     private final List<User> users = new ArrayList<>();
 
-    public FakeUserRepository() {
-        // On initialise nos données de test ici
-        users.add(new User("admin", "admin123", Role.ROLE_ADMIN));
-        users.add(new User("user", "user123", Role.ROLE_USER));
+    public FakeUserRepository(PasswordEncoder passwordEncoder,@Value("${app.security.admin-password}") String adminPwd,
+        @Value("${app.security.user-password}") String userPwd) {
+        users.add(new User("admin", passwordEncoder.encode(adminPwd), Role.ADMIN));
+        users.add(new User("user", passwordEncoder.encode(userPwd), Role.USER));
     }
+   
 
     public Optional<User> findByUsername(String username) {
         return users.stream()
