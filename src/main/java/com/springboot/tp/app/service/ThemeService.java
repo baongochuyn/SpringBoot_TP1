@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.springboot.tp.api.exception.NotFoundException;
 import com.springboot.tp.domain.entity.Theme;
 import com.springboot.tp.infra.repository.ThemeRepository;
 
@@ -26,7 +27,7 @@ public class ThemeService {
 
     public Theme findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Theme not found"));
+                .orElseThrow(() -> new NotFoundException("Theme with id " + id + " not found"));
     }
 
 }

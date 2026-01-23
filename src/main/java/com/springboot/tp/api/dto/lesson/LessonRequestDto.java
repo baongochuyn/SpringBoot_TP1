@@ -1,6 +1,9 @@
 package com.springboot.tp.api.dto.lesson;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class LessonRequestDto {
+    @NotBlank(message = "Title is required")
     private String title;
 
     public LessonRequestDto() {
