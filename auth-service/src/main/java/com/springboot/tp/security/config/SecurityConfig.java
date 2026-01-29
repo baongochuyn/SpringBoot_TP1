@@ -23,64 +23,68 @@ import com.springboot.tp.infra.repository.FakeUserRepository;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                    // Ajoute /error ici pour éviter le 403 en cas de bug interne
-                    .requestMatchers("/auth/**", "/error", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/lessons/**").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/themes").hasRole("ADMIN")
-                    .anyRequest().authenticated()
-            )
-            .oauth2ResourceServer(oauth -> oauth
-                    .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-            )
-            .build();
-}
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                return http
+                                .csrf(AbstractHttpConfigurer::disable)
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authorizeHttpRequests(auth -> auth
+                                                // Ajoute /error ici pour éviter le 403 en cas de bug interne
+                                                .requestMatchers("/auth/**", "/error", "/swagger-ui/**",
+                                                                "/v3/api-docs/**")
+                                                .permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/api/lessons/**").permitAll()
+                                                .requestMatchers("/.well-known/jwks.json").permitAll()
+                                                .requestMatchers("/api/public-key").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/themes").hasRole("ADMIN")
+                                                .anyRequest().authenticated())
+                                .oauth2ResourceServer(oauth -> oauth
+                                                .jwt(jwt -> jwt.jwtAuthenticationConverter(
+                                                                jwtAuthenticationConverter())))
+                                .build();
+        }
 
-    // ----------------------------
-    // JWT Converter
-    // ----------------------------
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-        grantedAuthoritiesConverter.setAuthorityPrefix("");
+        // ----------------------------
+        // JWT Converter
+        // ----------------------------
+        @Bean
+        public JwtAuthenticationConverter jwtAuthenticationConverter() {
+                JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+                grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+                grantedAuthoritiesConverter.setAuthorityPrefix("");
 
-        JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
-        jwtConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
-        return jwtConverter;
-    }
+                JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
+                jwtConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+                return jwtConverter;
+        }
 
-    // ----------------------------
-    // Password encoder
-    // ----------------------------
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        // ----------------------------
+        // Password encoder
+        // ----------------------------
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    // ----------------------------
-    // UserDetailsService unique
-    // ----------------------------
-    @Bean
-    public UserDetailsService userDetailsService(FakeUserRepository repo) {
-        return new InMemoryUserDetailsService(repo);
-    }
+        // ----------------------------
+        // UserDetailsService unique
+        // ----------------------------
+        @Bean
+        public UserDetailsService userDetailsService(FakeUserRepository repo) {
+                return new InMemoryUserDetailsService(repo);
+        }
 
-    // ----------------------------
-    // AuthenticationManager unique
-    // ----------------------------
-    @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService,
-                                                       PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
+        // ----------------------------
+        // AuthenticationManager unique
+        // ----------------------------
+        @Bean
+        public AuthenticationManager authenticationManager(UserDetailsService userDetailsService,
+                        PasswordEncoder passwordEncoder) {
+                DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+                provider.setUserDetailsService(userDetailsService);
+                provider.setPasswordEncoder(passwordEncoder);
 
-        return new org.springframework.security.authentication.ProviderManager(provider);
-    }
+                return new org.springframework.security.authentication.ProviderManager(provider);
+        }
 }
