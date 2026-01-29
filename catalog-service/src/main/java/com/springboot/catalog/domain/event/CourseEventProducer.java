@@ -13,6 +13,6 @@ public class CourseEventProducer {
     }
 
     public void sendCourseCreatedEvent(CourseEvent event) {
-        kafkaTemplate.send("course-events", event);
+        kafkaTemplate.send("COURSE_CREATED", event);
     }
 }
