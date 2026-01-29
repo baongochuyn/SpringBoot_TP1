@@ -31,7 +31,7 @@ public class SecurityConfig {
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(auth -> auth
                                                 // Ajoute /error ici pour éviter le 403 en cas de bug interne
-                                                .requestMatchers("/auth/**", "/error", "/swagger-ui/**",
+                                                .requestMatchers("/api/auth/**", "/error", "/swagger-ui/**",
                                                                 "/v3/api-docs/**")
                                                 .permitAll()
                                                 .requestMatchers(HttpMethod.GET, "/api/lessons/**").permitAll()
